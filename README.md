@@ -4,7 +4,7 @@
 🔗 **官方GitHub仓库**: [https://github.com/labring/FastGPT](https://github.com/labring/FastGPT)
 
 ### 配置要求
-- **大模型配置**：需通过 OneAPI 接入模型服务，配置方法详见 [FastGPT 官方文档](https://doc.fastgpt.run/docs/development/one-api)。
+- **大模型配置**：需通过 OneAPI 接入模型服务，配置方法详见 [FastGPT 官方文档](https://doc.tryfastgpt.ai/docs/development/openapi/intro/)。
 - **部署文件**：本实验完整部署配置见 `src/docker-compose.yaml`， `src/config.json` 。
 
 
