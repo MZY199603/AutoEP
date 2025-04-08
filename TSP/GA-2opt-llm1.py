@@ -146,11 +146,11 @@ class GA(object):
             'database': 'demo',
             'charset': 'utf8mb4'
         }
-        # ´´½¨Á¬½Ó
+        # åˆ›å»ºè¿æ¥
         conn = pymysql.connect(**config)
-        # ´´½¨ÓÎ±ê
+        # åˆ›å»ºæ¸¸æ ‡
         cursor = conn.cursor()
-        # Ö´ĞĞSQL²éÑ¯
+        # æ‰§è¡ŒSQLæŸ¥è¯¢
         cursor.execute('SELECT a FROM canshu2 WHERE n=%s ORDER BY id DESC LIMIT 1', (n,))
         result = cursor.fetchone()
         a = result[0] if result else None
@@ -159,7 +159,7 @@ class GA(object):
         b = result1[0] if result1 else None
         print(a)
         print(b)
-        # ¹Ø±ÕÓÎ±êºÍÁ¬½Ó
+        # å…³é—­æ¸¸æ ‡å’Œè¿æ¥
         cursor.close()
         conn.close()
         return a, b
@@ -167,16 +167,16 @@ class GA(object):
 
     def content1(self, N, fitness, cross_prob,mutate_prob):
         print(N)
-        content = "N:" + str(N) + ",AÖµ:" + str(mutate_prob) + ",BÖµ:" + str(
-            cross_prob) + ",Ğ§ÓÃÖµ:" + str(fitness)
+        content = "N:" + str(N) + ",Aå€¼:" + str(mutate_prob) + ",Bå€¼:" + str(
+            cross_prob) + ",æ•ˆç”¨å€¼:" + str(fitness)
         return content
 
     def update_probabilities(self, iteration, fitness, cross_prob, mutate_prob):
         """
-        ¸ù¾İµ±Ç°ÖÖÈºÊÊÓ¦¶ÈÇé¿ö×ÔÊÊÓ¦µ÷Õû½»²æ¸ÅÂÊºÍ±äÒì¸ÅÂÊ
+        æ ¹æ®å½“å‰ç§ç¾¤é€‚åº”åº¦æƒ…å†µè‡ªé€‚åº”è°ƒæ•´äº¤å‰æ¦‚ç‡å’Œå˜å¼‚æ¦‚ç‡
         """
-        iteration = iteration  # ÏÖÔÚµÄµü´ú´ÎÊı
-        fitness = fitness  # ÏÖÔÚµÄÊÊÓ¦¶ÈÖµ
+        iteration = iteration  # ç°åœ¨çš„è¿­ä»£æ¬¡æ•°
+        fitness = fitness  # ç°åœ¨çš„é€‚åº”åº¦å€¼
 
         content = self.content1(iteration, fitness, cross_prob, mutate_prob)
         print(content)
@@ -261,12 +261,12 @@ def main():
     model = GA(num_city=data.shape[0], num_total=10, iteration=500, data=data)
     best_path_indices, best_path, best_len = model.run()
 
-    # È·±£Â·¾¶ÊÇ·â±ÕµÄ£¬¼´»Øµ½Æğµã
+    # ç¡®ä¿è·¯å¾„æ˜¯å°é—­çš„ï¼Œå³å›åˆ°èµ·ç‚¹
     best_path = np.vstack([best_path, best_path[0]])
     best_path_indices = np.append(best_path_indices, best_path_indices[0])
 
-    print("×îÓÅÂ·¾¶±éÀú³ÇÊĞµÄĞòºÅ£º", best_path_indices)
-    print(f"×îÓÅÂ·¾¶³¤¶È: {best_len:.12f}")
+    print("æœ€ä¼˜è·¯å¾„éå†åŸå¸‚çš„åºå·ï¼š", best_path_indices)
+    print(f"æœ€ä¼˜è·¯å¾„é•¿åº¦: {best_len:.12f}")
 
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 8))
     ax1.scatter(best_path[:, 0], best_path[:, 1])
