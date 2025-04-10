@@ -1,4 +1,10 @@
 # AutoEP
+
+##简介
+以下是几个baseline
+[eoh]:(https://github.com/FeiLiu36/EoH)
+[reeohh]:(https://github.com/ai4co/reevo)
+
 ## 1. FastGPT 简介
 [FastGPT](https://github.com/labring/FastGPT) 是一个基于大语言模型的高效知识问答系统，支持私有化部署和自定义工作流搭建。  
 🔗 **官方GitHub仓库**: [https://github.com/labring/FastGPT](https://github.com/labring/FastGPT)
