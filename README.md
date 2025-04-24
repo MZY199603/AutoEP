@@ -12,8 +12,8 @@
 ### 1.1 fastgpt的docker启动 
 运行 docker-compose up-d
 ### 1.2 fastgpt接入本地模型 
-AI Proxy接入:[https://github.com/labring/FastGPT](https://github.com/labring/FastGPT)  复现代码推荐 
-oneapi 接入 ：[https://doc.tryfastgpt.ai/docs/development/modelconfig/one-api/]  长期使用推荐 
+AI Proxy接入:[https://github.com/labring/FastGPT](https://github.com/labring/FastGPT)  复现代码推荐  
+oneapi 接入 ：[https://doc.tryfastgpt.ai/docs/development/modelconfig/one-api/]  长期使用推荐  
 #### attention！！！ 
    相较于接入供应商的模型，建议接入本地部署的私有化大模型，实验效率能倍增。 
 ### 1.3 API接入
