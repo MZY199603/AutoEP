@@ -7,8 +7,8 @@
 
 ## 1.fastgpt的基础构建（Agent框架构建）
 [FastGPT](https://github.com/labring/FastGPT) 是一个基于大语言模型的高效知识问答系统，支持私有化部署和自定义工作流搭建。  
-🔗 **官方GitHub仓库**: [https://github.com/labring/FastGPT](https://github.com/labring/FastGPT) 
-🔗 **docker-compose**: [https://github.com/labring/FastGPT/blob/main/deploy/docker/docker-compose-oceanbase/docker-compose.yml] 
+🔗 **官方GitHub仓库**: [https://github.com/labring/FastGPT](https://github.com/labring/FastGPT)  
+🔗 **docker-compose**: [https://github.com/labring/FastGPT/blob/main/deploy/docker/docker-compose-oceanbase/docker-compose.yml]  
 ### 1.1 fastgpt的docker启动 
 运行 docker-compose up-d
 ### 1.2 fastgpt接入本地模型 
@@ -49,19 +49,16 @@ docker pull mysql：8.0.26
   ![配置API](src/发布后修改配置api访问权限.png "API配置")
 经过该三步就成功的发布了一个agent工作流，但还需要做些调整，你需要把HTTP的模块替换成你本地的iP地址。
 ### 3.2 数据库的启动和main代码运行
-  数据库加载：如果你有图形化管理的数据库软件，那么你只需将[src/demo.sql]sql文件导入进mysql即可。没有的话，你需要将demo.sql挂载进入mysql容器，并运行它。
-  数据库配置：在
-  
+  数据库加载：如果你有图形化管理的数据库软件，那么你只需将[src/demo.sql]sql文件导入进mysql即可。没有的话，你需要将demo.sql挂载进入mysql容器，并运行它。 
+  数据库配置：成功配置完后，你需要修改main.py中的conmysql(self, n)的数据库配置，修改为你的数据库配置，同样的在data_interaction你也需要修改成你的数据库配置。  
+  代码运行：第一步：启动data_interaction.py,需要Flask, pymysql等包，启动成功后你可以看到你数据接口的运行状态. 
+  第二步：启动main.py文件，启动前的检查工作。 1.agent工作流中的Http的模块是否和data_interaction的端口IP是匹配的。 
+  2.模型是否配置成功，可以先搭建简易工作流进行测试。
+  3. 3.1节的第三步是否进行了替换。
+ 上述三项检测完成后，即可开始运行main.py。 
   
 
-## 3. API 调用与数据存储
-### 外部调用接口（与工作流相互调用，保证数据实时给LLM）
-1. 通过 HTTP API 触发工作流并存储结果到数据库形成交互：详情见tsp/main.py,与data_interaction.py文件。
-本实验，采用的简易mysql（8.0.26）作为数据存储，数据库结构见src/demo.sql   
-2. 注意连接数据库时需要配置自己mysql数据库的地址。
-3. 在fastgpt中接入data_interaction.py中的flask接口IP改为您自己本机IP.
-
-## 4. OneApi模型接入
+## 4. OneApi模型接入（如果你需要的话，复现本实验暂时不需要）
 ### 通过本文提供的`src/docker-compose.yaml`进行部署
 1. 打开oneapi网站，按上述docker-compose部署后访问地址为 ---本地路由地址：3013
 2. 打开导航条上的渠道，添加新的渠道，选择自定义渠道，填入Base_url，渠道名称，和模型名称和你的KEY。
@@ -101,11 +98,5 @@ docker pull mysql：8.0.26
    6.workflow中所有LLM换成你配置的LLM即可
    ![修改你的模型](src/修改你配置的模型.png "模型修改")
 
-## 5. workflow注意事项
-   1. **Http协议模块** 
-     此处要更换成你的本机的路由IP,并建议单独对改模块进行调试。
-   ![修改IP](src/修改http接口ID.png "修改HTTP的IP")
 
-   2. **建议**
-   先搭好oneapi的配置再进行workflow的搭建。 
      
