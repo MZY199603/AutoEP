@@ -1,4 +1,5 @@
 # AutoEP
+## [中文](https://github.com/MZY199603/AutoEP/edit/main/README.md)||[EN](https://github.com/MZY199603/AutoEP/edit/main/README-en.md)
 ## 简介
 以下是几个基线：
 - [eoh](https://github.com/FeiLiu36/EoH)
