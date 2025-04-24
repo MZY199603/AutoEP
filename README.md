@@ -96,6 +96,7 @@ FastGPT可将工作流封装成一个API应用，详细内容请查阅：[https:
     "defaultSystemChatPrompt": "",
     "defaultConfig": {}
 }]
+```
    5.配置完成后需要重启服务
    命令 docker-compose down
    docker-compose up-d
