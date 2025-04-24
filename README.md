@@ -49,7 +49,7 @@ docker pull mysql：8.0.26
   ![配置API](src/发布后修改配置api访问权限.png "API配置")   
 经过该三步就成功的发布了一个agent工作流，但还需要做些调整，你需要把HTTP的模块替换成你本地的iP地址。    
 ### 3.2 数据库的启动和main代码运行    
-  数据库加载：如果你有图形化管理的数据库软件，那么你只需将[src/demo.sql]sql文件导入进mysql即可。没有的话，你需要将demo.sql挂载进入mysql容器，并运行它。     
+  数据库加载：如果你有图形化管理的数据库软件，那么你只需将：[src/demo.sql]sql文件导入进mysql即可。没有的话，你需要将demo.sql挂载进入mysql容器，并运行它。     
   数据库配置：成功配置完后，你需要修改main.py中的conmysql(self, n)的数据库配置，修改为你的数据库配置，同样的在data_interaction你也需要修改成你的数据库配置。      
   代码运行：第一步：启动data_interaction.py,需要Flask, pymysql等包，启动成功后你可以看到你数据接口的运行状态。    
   第二步：启动main.py文件，启动前的检查工作。 1.agent工作流中的Http的模块是否和data_interaction的端口IP是匹配的。     
