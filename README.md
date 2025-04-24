@@ -100,7 +100,7 @@ FastGPT可将工作流封装成一个API应用，详细内容请查阅：[https:
    5.配置完成后需要重启服务
    - 命令 docker-compose down    
    - docker-compose up-d        
-   6.workflow中所有LLM换成你配置的LLM即可          
+   - workflow中所有LLM换成你配置的LLM即可          
    ![修改你的模型](src/修改你配置的模型.png "模型修改")
 
 
