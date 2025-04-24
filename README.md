@@ -25,7 +25,7 @@ fastgpt可以将工作流封装成一个api应用，详情请见：[https://doc.
 可以采用docker方式pull镜像，也可以本地安装部署。 
 docker pull mysql：8.0.26 
 ### 2.2 数据库与算法交互和数据库与fastgpt交互 
-数据库和fastgptAgent工作流交互（通过Flask）   
+   数据库和fastgptAgent工作流交互（通过Flask）   
 **1.更新数据库**       
    - 在每次工作流的开始时，需要将上一轮的效用值更新到对应参数的轮中    
 **2.数据库查询**       
