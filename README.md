@@ -21,9 +21,9 @@ fastgpt可以将工作流封装成一个api应用，详情请见：[https://doc.
 
 ## 2.数据库部署
 ### 2.1 数据库搭建  
-本实验采用mysql（8.0.26）用于数据的交互和存储，数据库结构见src/demo.sql。 
-可以采用docker方式pull镜像，也可以本地安装部署。 
-docker pull mysql：8.0.26 
+   - 本实验采用mysql（8.0.26）用于数据的交互和存储，数据库结构见src/demo.sql。 
+   - 可以采用docker方式pull镜像，也可以本地安装部署。 
+   - docker pull mysql：8.0.26 
 ### 2.2 数据库与算法交互和数据库与fastgpt交互 
    数据库和fastgptAgent工作流交互（通过Flask）      
 **1.更新数据库**       
