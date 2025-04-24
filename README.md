@@ -14,7 +14,7 @@
 
 ### 1.2 FastGPT接入本地模型
 - **AI Proxy接入**：可参考[https://github.com/labring/FastGPT](https://github.com/labring/FastGPT)进行复现代码，这是一种推荐方式。对应[docker-compose](https://github.com/labring/FastGPT/blob/main/deploy/docker/docker-compose-oceanbase/docker-compose.yml)    
-- **oneapi接入**：长期使用推荐此方式，具体接入方法可查看[https://doc.tryfastgpt.ai/docs/development/modelconfig/one-api/](https://doc.tryfastgpt.ai/docs/development/modelconfig/one-api/) 。对应[docker-compose](https://github.com/MZY199603/AutoEP/edit/main/src/docker-compose.yaml)
+- **oneapi接入**：长期使用推荐此方式，具体接入方法可查看[https://doc.tryfastgpt.ai/docs/development/modelconfig/one-api/](https://doc.tryfastgpt.ai/docs/development/modelconfig/one-api/) 。对应[docker-compose](https://github.com/MZY199603/AutoEP/edit/main/src/docker-compose.yml)
 
 **注意！！！**
 相较于接入供应商的模型，建议接入本地部署的私有化大模型，这样实验效率能大幅提升。
@@ -43,10 +43,10 @@ FastGPT可将工作流封装成一个API应用，详细内容请查阅：[https:
 ### 3.1 快速启动流程
 1. **新建工作流**：进入FastGPT控制台，点击右侧的`+新建工作流`。
 ![工作流](src/创建工作流.png "创建工作流")
-2. **导入配置**：使用本项目提供的`workflow_export.json`文件导入预定义工作流。工作流导入完成后，将模型替换为自己配置的模型，需将HTTP模块（与data_interaction.py的接口一一对应）替换为本地的IP地址。
+2. **导入配置**：使用本项目提供的`workflow_export.json`文件导入预定义工作流。工作流导入完成后，将模型替换为自己配置的模型，需将HTTP模块（与data_interaction.py的接口一一对应）替换为本地的IP地址。    
 ![导入](src/导入1.png "导入工作流1")![导入](src/导入2.png "导入工作流2")
 3. **发布工作流**：点击`发布`按钮激活工作流，并记录生成的`workflowId`，用于API调用。同时，需要将`main.py`的`fastgpt`方法中的`key`替换为自己的key。
-![发布](src/发布.png "发布")![配置API](src/api配置 "API配置")
+![发布](src/发布.png "发布")![配置API](src/api配置.png "API配置")
 
 完成上述三步后，就成功发布了一个agent工作流，代码配置如果没有完成修改可以先发布，后续再更新。（点击保存且发布完成更新）
 
