@@ -2,7 +2,7 @@
 ## 简介
 以下是几个基线：
 - [eoh](https://github.com/FeiLiu36/EoH)
-- [reeohh=](https://github.com/ai4co/reevo)
+- [reeov](https://github.com/ai4co/reevo)
 
 ## 1. FastGPT的基础构建（Agent框架构建）
 [FastGPT](https://github.com/labring/FastGPT)是一个基于大语言模型的高效知识问答系统，支持私有化部署和自定义工作流搭建。
