@@ -13,8 +13,8 @@
 执行`docker-compose up -d`命令启动FastGPT。
 
 ### 1.2 FastGPT接入本地模型
-- **AI Proxy接入**：可参考[https://github.com/labring/FastGPT](https://github.com/labring/FastGPT)进行复现代码，这是一种推荐方式。
-- **oneapi接入**：长期使用推荐此方式，具体接入方法可查看[https://doc.tryfastgpt.ai/docs/development/modelconfig/one-api/](https://doc.tryfastgpt.ai/docs/development/modelconfig/one-api/) 。
+- **AI Proxy接入**：可参考[https://github.com/labring/FastGPT](https://github.com/labring/FastGPT)进行复现代码，这是一种推荐方式。对应[docker-compose](https://github.com/labring/FastGPT/blob/main/deploy/docker/docker-compose-oceanbase/docker-compose.yml)    
+- **oneapi接入**：长期使用推荐此方式，具体接入方法可查看[https://doc.tryfastgpt.ai/docs/development/modelconfig/one-api/](https://doc.tryfastgpt.ai/docs/development/modelconfig/one-api/) 。对应[docker-compose](https://github.com/MZY199603/AutoEP/edit/main/src/docker-compose.yaml)
 
 **注意！！！**
 相较于接入供应商的模型，建议接入本地部署的私有化大模型，这样实验效率能大幅提升。
@@ -42,14 +42,16 @@ FastGPT可将工作流封装成一个API应用，详细内容请查阅：[https:
 
 ### 3.1 快速启动流程
 1. **新建工作流**：进入FastGPT控制台，点击右侧的`+新建工作流`。
-2. **导入配置**：使用本项目提供的`workflow_export.json`文件导入预定义工作流。工作流导入完成后，将模型替换为自己配置的模型。
+![工作流](src/发布后修改配置api访问权限.png "创建工作流")
+2. **导入配置**：使用本项目提供的`workflow_export.json`文件导入预定义工作流。工作流导入完成后，将模型替换为自己配置的模型，需将HTTP模块（与data_interaction.py的接口一一对应）替换为本地的IP地址。
+![导入](src/导入.png "导入工作流1")![导入](src/导入.png "导入工作流2")
 3. **发布工作流**：点击`发布`按钮激活工作流，并记录生成的`workflowId`，用于API调用。同时，需要将`main.py`的`fastgpt`方法中的`key`替换为自己的key。
-![配置API](src/发布后修改配置api访问权限.png "API配置")
+![配置API](src/发布后修改配置api访问权限-en.png "API配置")
 
-完成上述三步后，就成功发布了一个agent工作流，但还需进行一些调整，需将HTTP模块替换为本地的IP地址。
+完成上述三步后，就成功发布了一个agent工作流，代码配置如果没有完成修改可以先发布，后续再更新。（点击保存且发布完成更新）
 
 ### 3.2 数据库的启动和main代码运行
-1. **数据库加载**：若有图形化管理的数据库软件，直接将`src/demo.sql`文件导入mysql即可；若没有，则需将`demo.sql`挂载到mysql容器并运行。
+1. **数据库加载**：若有图形化管理的数据库软件，直接将[demo.sql](https://github.com/MZY199603/AutoEP/edit/main/src/demo.sql)文件导入mysql即可；若没有，则需将`demo.sql`挂载到mysql容器并运行。
 2. **数据库配置**：成功配置数据库后，需修改`main.py`中的`conmysql(self, n)`的数据库配置为自己的数据库配置，同时在`data_interaction`中也进行相应修改。
 3. **代码运行**：
     - 第一步：启动`data_interaction.py`，运行该文件需要安装Flask、pymysql等包。启动成功后，可查看数据接口的运行状态。
