@@ -5,25 +5,55 @@
 [eoh]:(https://github.com/FeiLiu36/EoH)   
 [reeohh=]:(https://github.com/ai4co/reevo)   
 
-## 1. FastGPT 简介
+## 1.fastgpt的基础构建（Agent框架构建）
 [FastGPT](https://github.com/labring/FastGPT) 是一个基于大语言模型的高效知识问答系统，支持私有化部署和自定义工作流搭建。  
-🔗 **官方GitHub仓库**: [https://github.com/labring/FastGPT](https://github.com/labring/FastGPT)
+🔗 **官方GitHub仓库**: [https://github.com/labring/FastGPT](https://github.com/labring/FastGPT) 
+🔗 **docker-compose**: [https://github.com/labring/FastGPT/blob/main/deploy/docker/docker-compose-oceanbase/docker-compose.yml] 
+### 1.1 fastgpt的docker启动 
+运行 docker-compose up-d
+### 1.2 fastgpt接入本地模型 
+AI Proxy接入:[https://github.com/labring/FastGPT](https://github.com/labring/FastGPT)  复现代码推荐
+oneapi 接入 ：[https://doc.tryfastgpt.ai/docs/development/modelconfig/one-api/]  长期使用推荐
+#### attention！！！
+   相较于接入供应商的模型，建议接入本地部署的私有化大模型，实验效率能倍增。
+### 1.3 API接入
+fastgpt可以将工作流封装成一个api应用，详情请见：[https://doc.tryfastgpt.ai/docs/development/openapi/intro/]
 
-### 配置要求
-- **大模型配置**：需通过 OneAPI 接入模型服务，配置方法详见 [FastGPT 官方文档](https://doc.tryfastgpt.ai/docs/development/openapi/intro/)。
-- **部署文件**：本实验完整部署配置见 `src/docker-compose.yaml`， `src/config.json` 。
+## 2.数据库部署
+### 2.1 数据库搭建  
+本实验采用mysql（8.0.26）用于数据的交互和存储，数据库结构见src/demo.sql。
+可以采用docker方式pull镜像，也可以本地安装部署。
+docker pull mysql：8.0.26
+### 2.2 数据库与算法交互和数据库与fastgpt交互 
+数据库和fastgptAgent工作流交互（通过Flask）
+1.更新数据库
+在每次工作流的开始时，需要将上一轮的效用值更新到对应参数的轮中
+2.数据库查询
+提供给Agent 5轮次的超参数和对应的效用信息。
+3.插入数据库
+在每次工作流结束时，需要将agent输出的超参数新增入下一轮。
+数据库和算法的交互主要是把大模型的输出
+4.每次调用Fastgpt工作流之前，会查询前一轮次的超参数和效用值，并输入给fastgpt
 
 
-## 2. 工作流搭建
-### 快速启动流程
-1. **新建工作流**  
+## 3. 实例演示（TSP）
+### 预先步骤！！！！ 
+先配置模型！参考1.2节 
+### 3.1快速启动流程 
+ 第一步 **新建工作流**  
    - 进入 FastGPT 控制台，点击右侧 `+ 新建工作流`。
-2. **导入配置**  
-   - 使用本项目提供的 `workflow_export.json` 文件导入预定义工作流。
-3. **发布工作流**  
+ 第二步 **导入配置**  
+   - 使用本项目提供的 `workflow_export.json` 文件导入预定义工作流。工作流导入完成后把模型替换成你配置的模型。
+ 第三步 **发布工作流**  
    - 点击 `发布` 按钮激活工作流，记录生成的 `workflowId` 供 API 调用。需要把你的key替换掉main.py的fastgpt方法中的key。
   ![配置API](src/发布后修改配置api访问权限.png "API配置")
-     
+经过该三步就成功的发布了一个agent工作流，但还需要做些调整，你需要把HTTP的模块替换成你本地的iP地址。
+### 3.2 数据库的启动和main代码运行
+  数据库加载：如果你有图形化管理的数据库软件，那么你只需将[src/demo.sql]sql文件导入进mysql即可。没有的话，你需要将demo.sql挂载进入mysql容器，并运行它。
+  数据库配置：在
+  
+  
+
 ## 3. API 调用与数据存储
 ### 外部调用接口（与工作流相互调用，保证数据实时给LLM）
 1. 通过 HTTP API 触发工作流并存储结果到数据库形成交互：详情见tsp/main.py,与data_interaction.py文件。
