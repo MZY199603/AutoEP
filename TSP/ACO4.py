@@ -15,6 +15,9 @@ from scipy.spatial.distance import pdist, squareform
 import matplotlib.pyplot as plt
 import pandas as pd
 import math
+import requests
+import pymysql
+
 
 
 # ***** begin 配置信息 *****
@@ -563,6 +566,8 @@ class ACO(VrpHeuristic):
         self.visible_mat[np.diag_indices_from(self.visible_mat)] = 0  # 对角线值置0
         self.visible_mat1 = 1 / (self.distance_matrix + np.eye(cargo_site_total + 1))  # 可见度矩阵
         self.visible_mat1[np.diag_indices_from(self.visible_mat)] = 0  # 对角线值置0
+        self.pheromone_factor_alpha = 0.7  # 信息素启发式因子
+        self.pheromone_factor_beta = 2 
 
     def update_input_canshu(self, new_pheromone_factor_alpha,new_pheromone_factor_beta):
 
@@ -574,13 +579,66 @@ class ACO(VrpHeuristic):
         pheromone_factor_beta  = new_pheromone_factor_alpha
         return pheromone_factor_alpha, pheromone_factor_beta
 
-    def update_output_canshu(self,N,pheromone_factor_alpha,pheromone_factor_beta,cycle,cycle_distance):
+    def update_output_canshu(self,N,pheromone_factor_alpha,pheromone_factor_beta,cycle_distance):
+
+        pheromone_factor_alpha, pheromone_factor_beta
 
 
 
 
         pass
 
+    def fastgpt(self,content):
+        print(content)
+        url = 'http://192.168.50.25:3002/api/v1/chat/completions'
+        headers = {
+            'Authorization': 'Bearer fastgpt-fxw5VXAGwxm9ycMxASetiJ8bJBBUoaUCpvhRwsjyFe2qXo9iKiJXb',
+            'Content-Type': 'application/json'
+        }
+        data = {
+            "chatId": f"chat_{random.randint(100000, 999999)}",
+            "stream": False,
+            "detail": False,
+            "messages": [{
+                "role": "user",
+                "content": content}]}
+        response = requests.post(url, headers=headers, json=data)
+        text = response.text
+        return text
+
+    def content1(self,N, fitness, cross_prob,mutate_prob):
+        print(N)
+        content = "N:" + str(N) + ",A值:" + str(mutate_prob) + ",B值:" + str(
+            cross_prob) + ",效用值:" + str(fitness)
+        return content
+
+    def conmysql(self,n):
+        # ... existing code ...
+        config = {
+            'host': '192.168.50.25',
+            'port': 33306,
+            'user': 'root',
+            'password': 'oneapimmysql',
+            'database': 'demo',
+            'charset': 'utf8mb4'
+            }
+            # 创建连接
+        conn = pymysql.connect(**config)
+            # 创建游标
+        cursor = conn.cursor()
+        # 执行SQL查询
+        cursor.execute('SELECT a FROM canshu2 WHERE n=%s ORDER BY id DESC LIMIT 1', (n,))
+        result = cursor.fetchone()
+        a = result[0] if result else None
+        cursor.execute('SELECT b FROM canshu2 WHERE n=%s ORDER BY id DESC LIMIT 1', (n,))
+        result1 = cursor.fetchone()
+        b = result1[0] if result1 else None
+        print(a)
+        print(b) 
+        # 关闭游标和连接
+        cursor.close()
+        conn.close()
+        return a, b
 
 
 
@@ -617,7 +675,10 @@ class ACO(VrpHeuristic):
                 best_ants_info1=self.get_best_ant_info1(ants_info1, best_ants_info1)
                 self.update_phero_mat(ants_info)
                 self.update_phero_mat1(ants_info1)
-                N+=1
+                content = self.content1(N + 1, cycle_distance, self.pheromone_factor_alpha, self.pheromone_factor_beta)
+                response = self.fastgpt(content)
+                # pheromone_factor_alpha, pheromone_factor_beta= self.update_output_canshu(N,pheromone_factor_alpha,pheromone_factor_beta,cycle_distance)
+                self.pheromone_factor_alpha, self.pheromone_factor_beta = self.conmysql(N + 1)
 
             if ix % 10 == 0:
                 print("run times %s, best score is: %s, car_no is %s, cycle_distance is %s, best score1 is: %s, car_no1 is %s, cycle_distance1 is %s "
@@ -712,9 +773,6 @@ class ACO(VrpHeuristic):
         else:
             return ant_ix % cargo_site_total + 1
 
-    def get_next_cargo_site_no(self):
-
-        pass
 
     def add_car_in_path(self, path):
         cargo_site_car_list, cargo_car_loc2carno = self.data.get_a_possible_try(path)   #
@@ -725,11 +783,7 @@ class ACO(VrpHeuristic):
         temp_ants_info = ants_info.copy()
         if best_ants_info:
             temp_ants_info.append(best_ants_info)
-        # if self.phero_by_path_length:
-        #     # ants_info.sort(key=lambda x: x[1])
-        #     temp_ants_info = sorted(temp_ants_info, key=lambda x: x[1])
-        # else:
-        #     # ants_info.sort(key=lambda x: x[0], reverse=True)
+
         temp_ants_info = sorted(temp_ants_info, key=lambda x: x[0], reverse=True)
 
         return temp_ants_info[0]
@@ -739,11 +793,7 @@ class ACO(VrpHeuristic):
         temp_ants_info = ants_info.copy()
         if best_ants_info:
             temp_ants_info.append(best_ants_info)
-        # if self.phero_by_path_length:
-        #     # ants_info.sort(key=lambda x: x[1])
-        #     temp_ants_info = sorted(temp_ants_info, key=lambda x: x[1])
-        # else:
-        #     # ants_info.sort(key=lambda x: x[0], reverse=True)
+
         temp_ants_info = sorted(temp_ants_info, key=lambda x: x[0], reverse=True)
 
         return temp_ants_info[0]
@@ -763,6 +813,8 @@ class ACO(VrpHeuristic):
                 last_cargo_site = cargo_site
         self.phero_mat = (1 - volatil_factor) * self.phero_mat + temp_phero_mat
 
+
+
     def update_phero_mat1(self, ants_info):
         # phero_by_path_length时 采用蚁周模型，否则用适应度信息
         temp_phero_mat = np.zeros((cargo_site_total + 1, cargo_site_total + 1))
@@ -771,8 +823,7 @@ class ACO(VrpHeuristic):
             last_cargo_site = -1
             for cargo_site in path:
                 if last_cargo_site != -1:
-                    # temp = pheromone_cons / cycle_distance if self.phero_by_path_length \
-                    #     else pheromone_cons / (-score)
+
                     temp = pheromone_cons / (cycle_distance * -score)
                     temp_phero_mat[last_cargo_site][cargo_site] += temp
                     temp_phero_mat[cargo_site][last_cargo_site] += temp
@@ -792,34 +843,6 @@ class ACO(VrpHeuristic):
 
 
 def run():
-    # cargo_sites = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
-    # car_info_dict = {1: car_info(speed=30, volume=190), 2: car_info(speed=30, volume=200),
-    #                  3: car_info(speed=30, volume=190), 4: car_info(speed=30, volume=200),
-    #                  5: car_info(speed=30, volume=200), 6: car_info(speed=30, volume=180),
-    #                  7: car_info(speed=30, volume=200), 8: car_info(speed=30, volume=210),
-    #                  9: car_info(speed=30, volume=220), 10: car_info(speed=30, volume=210)}
-    # cargo_site_info_dict = {1: cargo_site_info(site_location_x=-95, site_location_y=40, cargo_weight=0),
-    #                         2: cargo_site_info(site_location_x=-40, site_location_y=-50, cargo_weight=31),
-    #                         3: cargo_site_info(site_location_x=95, site_location_y=-55, cargo_weight=92),
-    #                         4: cargo_site_info(site_location_x=40, site_location_y=-15, cargo_weight=78),
-    #                         5: cargo_site_info(site_location_x=-10, site_location_y=95, cargo_weight=68),
-    #                         6: cargo_site_info(site_location_x=45, site_location_y=-50, cargo_weight=93),
-    #                         7: cargo_site_info(site_location_x=-10, site_location_y=60, cargo_weight=66),
-    #                         8: cargo_site_info(site_location_x=75, site_location_y=15, cargo_weight=36),
-    #                         9: cargo_site_info(site_location_x=-35, site_location_y=50, cargo_weight=59),
-    #                         10: cargo_site_info(site_location_x=-85, site_location_y=20, cargo_weight=4),
-    #                         11: cargo_site_info(site_location_x=45, site_location_y=25, cargo_weight=84),
-    #                         12: cargo_site_info(site_location_x=30, site_location_y=0, cargo_weight=87),
-    #                         13: cargo_site_info(site_location_x=30, site_location_y=-90, cargo_weight=76),
-    #                         14: cargo_site_info(site_location_x=50, site_location_y=40, cargo_weight=51),
-    #                         15: cargo_site_info(site_location_x=5, site_location_y=-60, cargo_weight=59),
-    #                         16: cargo_site_info(site_location_x=65, site_location_y=65, cargo_weight=97),
-    #                         17: cargo_site_info(site_location_x=-90, site_location_y=65, cargo_weight=89),
-    #                         18: cargo_site_info(site_location_x=-80, site_location_y=90, cargo_weight=5),
-    #                         19: cargo_site_info(site_location_x=-75, site_location_y=15, cargo_weight=64),
-    #                         20: cargo_site_info(site_location_x=-15, site_location_y=40, cargo_weight=99),
-    #                         #21: cargo_site_info(site_location_x=-19, site_location_y=46, cargo_weight=69),
-    #                         0: cargo_site_info(site_location_x=0, site_location_y=0, cargo_weight=0)}
     cargo_sites = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
     car_info_dict = {1: car_info(speed=40, volume=250), 2: car_info(speed=30, volume=290),
                      3: car_info(speed=40, volume=270), 4: car_info(speed=20, volume=290),
