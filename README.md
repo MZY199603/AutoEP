@@ -118,7 +118,7 @@ FastGPT可将工作流封装成一个API应用，详细内容请查阅：[https:
 
    使用 `docker-compose` 启动 FastGPT：
    ```bash
-   docker-compose up
+   docker-compose up  [docker-compose](https://github.com/labring/FastGPT/blob/main/deploy/docker/docker-compose-oceanbase/docker-compose.yml)
    ```
 
    如果需要手动下载 MySQL 并导入数据：
@@ -127,7 +127,7 @@ FastGPT可将工作流封装成一个API应用，详细内容请查阅：[https:
    # 导入 demo.sql 文件
    docker exec -i mysql_container_name mysql -u root -p database_name < demo.sql
    ```
-   更多关于 Docker Compose 的使用方法可以参考相关资源 。
+   如果有本地数据库的，直接导入即可。
 
 2. **启动后配置 FastGPT**  
    打开 FastGPT 的启动页面，默认账号为 `root`，密码为 `1234`。进入后需配置好 LLM 模型和向量模型。可以从 DeepSeek、OpenAI 等渠道获取 API Key，也可以选择本地部署（目前仅支持通过 OpenAI 接口调用）。
