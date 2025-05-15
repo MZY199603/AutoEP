@@ -104,4 +104,60 @@ FastGPT可将工作流封装成一个API应用，详细内容请查阅：[https:
    ![修改你的模型](src/修改你配置的模型.png "模型修改")
 
 
+# 以 TSP 为例，快速复现实验
+## 环境配置和运行
+
+1. **使用 Docker Compose 下拉最新版本的 FastGPT**  
+   首先确保已安装 Docker 和 Docker Compose。可以通过以下命令安装 Docker Compose：
+   ```bash
+   # 安装 Docker Desktop（包含 Docker Compose）
+   # 或者单独安装 Docker Compose
+   sudo curl -L "https://github.com/docker/compose/releases/download/v2.23.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+   sudo chmod +x /usr/local/bin/docker-compose
+   ```
+
+   使用 `docker-compose` 启动 FastGPT：
+   ```bash
+   docker-compose up
+   ```
+
+   如果需要手动下载 MySQL 并导入数据：
+   ```bash
+   docker pull mysql
+   # 导入 demo.sql 文件
+   docker exec -i mysql_container_name mysql -u root -p database_name < demo.sql
+   ```
+   更多关于 Docker Compose 的使用方法可以参考相关资源 。
+
+2. **启动后配置 FastGPT**  
+   打开 FastGPT 的启动页面，默认账号为 `root`，密码为 `1234`。进入后需配置好 LLM 模型和向量模型。可以从 DeepSeek、OpenAI 等渠道获取 API Key，也可以选择本地部署（目前仅支持通过 OpenAI 接口调用）。
+
+3. **让 data_interaction 文件与 MySQL 互通**  
+   更改 MySQL 配置信息为你自己的 MySQL 地址，并下载所需的包，例如 Flask：
+   ```bash
+   pip install flask
+   ```
+   启动服务后，终端会输出该服务的 IP 和端口，请记录下来。
+
+4. **新建并导入对应的 workflow**  
+   修改大模型为你配置的大模型，并将 HTTP 模型的 IP 和端口设置为 data_interaction 文件输出的端口和 IP。保存并发布 API 接口，记录生成的 Key。
+
+5. **在 TSP 主文件 main 下修改配置**  
+   修改 MySQL 配置文件和 FastGPT 的连接配置，替换为部署的地址和刚刚配置的 Key。启动后实验开始运行。
+
+## 解释说明，可能存在的问题
+
+1. **工作流中的文档提取模块**  
+   工作流的第一个模块是使用大模型提取输入的 N 值，实际上这一块可以通过硬编码解决，也可以调用函数模块进行提取 。
+
+2. **运行中的监控**  
+   在运行过程中，可以通过查看对话日志来了解实验运行的情况，同时可以查看详情来了解各个模块之间的数据交互情况 。
+
+3. **模型选择建议**  
+   使用参数量更大的模型通常效果更好，且本地离线部署的模型实验效率更高（适配好了，一般能稳定跑 500 个 epoch 以上）。
+
+4. **不建议使用推理模型**  
+   不建议使用推理模型，因为其抽取能力较差且效率慢（当然你可以使用多个大模型的组合来提升性能）。
+
+
      
