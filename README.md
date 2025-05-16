@@ -130,21 +130,29 @@ FastGPT可将工作流封装成一个API应用，详细内容请查阅：[https:
    ```
    如果有本地数据库的，直接导入即可。
 
-3. **启动后配置 FastGPT**  
+2. **启动后配置 FastGPT**  
    打开 FastGPT 的启动页面，默认账号为 `root`，密码为 `1234`。进入后需配置好 LLM 模型和向量模型。可以从 DeepSeek、OpenAI 等渠道获取 API Key，也可以选择本地部署（目前仅支持通过 OpenAI 接口调用）。
 
-4. **让 data_interaction 文件与 MySQL 互通**  
+3. **让 data_interaction 文件与 MySQL 互通**  
    更改 MySQL 配置信息为你自己的 MySQL 地址，并下载所需的包，例如 Flask：
    ```bash
    pip install flask
+   etc..
+   python
+   run data_interaction.py
    ```
    启动服务后，终端会输出该服务的 IP 和端口，请记录下来。
 
-5. **新建并导入对应的 workflow**  
+4. **新建并导入对应的 workflow**  
    修改大模型为你配置的大模型，并将 HTTP 模型的 IP 和端口设置为 data_interaction 文件输出的端口和 IP。保存并发布 API 接口，记录生成的 Key。
 
-6. **在 TSP 主文件 main 下修改配置**  
+5. **在 TSP 主文件 main.py 下修改配置**  
    修改 MySQL 配置文件和 FastGPT 的连接配置，替换为部署的地址和刚刚配置的 Key。启动后实验开始运行。
+      ```bash
+   python
+   run main.py
+   ```
+   
 
 ## 解释说明，可能存在的问题
 
