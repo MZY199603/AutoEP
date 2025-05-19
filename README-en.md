@@ -101,3 +101,64 @@ After completing the above three checks, you can run `main.py`.
     "defaultSystemChatPrompt": "",
     "defaultConfig": {}
 }]
+# TSP Example: Quick Experiment Reproduction
+
+## Environment Setup and Execution
+
+1. **Pull the Latest FastGPT Version Using Docker Compose**  
+   Ensure Docker and Docker Compose are installed. Install Docker Compose via:
+   ```bash
+   # Install Docker Desktop (includes Docker Compose)
+   # Or install Docker Compose separately
+   sudo curl -L "https://github.com/docker/compose/releases/download/v2.23.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+   sudo chmod +x /usr/local/bin/docker-compose
+   ```
+
+   Start FastGPT with `docker-compose`:
+   [docker-compose](https://github.com/labring/FastGPT/blob/main/deploy/docker/docker-compose-oceanbase/docker-compose.yml)
+   ```bash
+   docker-compose up  
+   ```
+
+   If manually importing MySQL data:
+   ```bash
+   docker pull mysql
+   # Import demo.sql
+   docker exec -i mysql_container_name mysql -u root -p database_name < demo.sql
+   ```
+   Directly import for local databases.
+
+2. **Post-Launch FastGPT Configuration**  
+   Access FastGPT’s startup page (default account: `root`, password: `1234`). Configure LLM and vector models. Obtain API keys from DeepSeek/OpenAI or deploy locally (currently supports only OpenAI-style API calls) .
+
+3. **Enable MySQL Communication for `data_interaction`**  
+   Update MySQL configuration with your MySQL address. Install required packages like Flask:
+   ```bash
+   pip install flask
+   etc..
+   python run data_interaction.py
+   ```
+   Note the service IP/port output in the terminal.
+
+4. **Create and Import Workflow**  
+   Select your configured LLM and set the HTTP model’s IP/port to `data_interaction`’s output. Save, publish the API, and record the generated key.
+
+5. **Modify TSP Main File `main.py`**  
+   Update MySQL configuration and FastGPT connection settings with deployment addresses and the recorded key. Launch the experiment:
+   ```bash
+   python run main.py
+   ```
+
+## Explanations and Potential Issues
+
+1. **Document Extraction Module in Workflow**  
+   The first workflow module uses an LLM to extract input N values. This can alternatively be hardcoded or handled via a function call .
+
+2. **Runtime Monitoring**  
+   Monitor experiments via chat logs and inspect data interactions between modules .
+
+3. **Model Selection Recommendations**  
+   Larger-parameter models perform better. Offline local deployment improves efficiency (stably runs 500+ epochs after optimization) .
+
+4. **Avoid Inference-Optimized Models**  
+   Inference models are discouraged due to poor extraction quality and slow speed (though combining multiple LLMs may enhance performance).
