@@ -107,7 +107,7 @@ After completing the above three checks, you can run `main.py`.
 # Quick Experiment Reproduction Using TSP as an Example
 
 ## Overall Flowchart
-![Flowchart](src/整体流程.png "Overall Process")
+![Flowchart](src/en流程图.png "Overall Process")
 
 ## Environment Setup and Execution
 
@@ -179,7 +179,7 @@ After completing the above three checks, you can run `main.py`.
 # AutoEP Workflow Core Node Details
 
 ## TSP Workflow Node Description
-![Node Flowchart](src/flowchart.png "Node Flowchart")
+![Node Flowchart](src/en2.png "Node Flowchart")
 
 ### 1. Input Parsing Node
 - &zwnj;**Function**&zwnj;: Receives current iteration data from user input
