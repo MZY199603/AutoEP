@@ -171,9 +171,10 @@ FastGPT可将工作流封装成一个API应用，详细内容请查阅：[https:
    ![fastgpt根目录修改](src/fastgpt地址.png "fastgpt根目录修改")
       ```bash
    python
-   - run main.py
-   - run data_interaction.py
+   run main.py
+   run data_interaction.py
    ``
+   ```bash
    -- 最后检查mysql、fastgpt、py的fastapi的三端互通，上述配置顺序可以自行安排。 
   
 # AutoEP 工作流核心节点详解
