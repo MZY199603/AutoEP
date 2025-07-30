@@ -164,6 +164,10 @@ FastGPT可将工作流封装成一个API应用，详细内容请查阅：[https:
 
 5. **在 TSP 主文件 main.py 下修改配置**  
    修改 MySQL 配置文件和 FastGPT 的连接配置，替换为部署的地址和刚刚配置的 Key。启动后实验开始运行。
+   修改以下端口配置
+   ![mysql修改-main.py](src/数据库连接.png "数据库连接")
+   ![mysql修改-data_interaction](src/数据库连接data.png "数据库连接")
+   ![fastgpt根目录修改](src/fastgpt地址.png "fastgpt根目录修改")
       ```bash
    python
    run main.py
