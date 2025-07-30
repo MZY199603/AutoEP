@@ -149,18 +149,19 @@ FastGPT可将工作流封装成一个API应用，详细内容请查阅：[https:
    ### 模型与接口配置
     1. &zwnj;**模型替换**&zwnj;  
        - 路径：`FastGPT控制台 > 工作流编辑 > 模型配置`  
-       - 选择已部署的`qwen2.5-7b-instruct`模型  
+       - 选择已部署的`qwen2.5-7b-instruct`模型，这里选择你自己的配置的模型  
+       - 导入workflow： `新建空白workflow > 左上角你新建的workflow > 选择导入workflow脚本>导入workflow.json文件` 
        - 验证API端点与`data_interaction`服务一致（如`192.168.50.24:5000`）
-    
     2. &zwnj;**HTTP模块设置**&zwnj;  
        ```yaml
+       - 替换你的http模块端口为你的server ip 
        http_modules:
          - name: "遗传算法参数接口"
            url: "http://{{SERVER_IP}}:5000/api/v1/process"
            timeout: 5000
+       - 右上角save and publish>点击publish channel选择apirequest并生成key（需要记录）
     3. &zwnj;**密钥生成**&zwnj;
        - 发布后在API管理 > 密钥管理获取API_KEY 
-       - 建议设置速率限制：100次/分钟 
 
 5. **在 TSP 主文件 main.py 下修改配置**  
    修改 MySQL 配置文件和 FastGPT 的连接配置，替换为部署的地址和刚刚配置的 Key。启动后实验开始运行。
@@ -170,8 +171,11 @@ FastGPT可将工作流封装成一个API应用，详细内容请查阅：[https:
    ![fastgpt根目录修改](src/fastgpt地址.png "fastgpt根目录修改")
       ```bash
    python
-   run main.py
-   ```
+   - run main.py
+   - run data_interaction.py
+   ``
+   -- 最后检查mysql、fastgpt、py的fastapi的三端互通，上述配置顺序可以自行安排。 
+  
 # AutoEP 工作流核心节点详解
 
 ##  TSP工作流节点说明
