@@ -1,8 +1,4 @@
 """
-author:Xu Zhenxing（NUDT）
-data:2023/10/18   20:05
-theme:Uav edge computing task assignment and trajectory planning
-e-mail：xuzhenxing@nudt.edu.cn
 """
 
 
@@ -879,3 +875,4 @@ def run():
 
 if __name__ == '__main__':
     run()
+
